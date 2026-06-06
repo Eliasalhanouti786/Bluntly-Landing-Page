@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { X, Check, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react"
 
@@ -104,20 +104,46 @@ const verdictConfig = {
   },
 }
 
+const AUTO_SCROLL_MS = 4000
+
 export function FitDemo() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [hasInteracted, setHasInteracted] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+
   const job = jobs[activeIndex]
   const config = verdictConfig[job.verdict]
   const Icon = config.icon
 
-  const prev = () =>
+  // Auto-scroll: advance every N ms, but pause on hover or once the user
+  // takes manual control. Stops permanently after first manual nav.
+  useEffect(() => {
+    if (hasInteracted || isHovered) return
+    const interval = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % jobs.length)
+    }, AUTO_SCROLL_MS)
+    return () => clearInterval(interval)
+  }, [hasInteracted, isHovered])
+
+  const prev = () => {
+    setHasInteracted(true)
     setActiveIndex((i) => (i - 1 + jobs.length) % jobs.length)
-  const next = () => setActiveIndex((i) => (i + 1) % jobs.length)
+  }
+  const next = () => {
+    setHasInteracted(true)
+    setActiveIndex((i) => (i + 1) % jobs.length)
+  }
+  const jumpTo = (i: number) => {
+    setHasInteracted(true)
+    setActiveIndex(i)
+  }
 
   return (
     <div className="w-full max-w-xl mx-auto">
       {/* Card */}
       <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className={`rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur-sm p-8 shadow-2xl transition-shadow ${config.glow}`}
       >
         {/* Card Header */}
@@ -243,7 +269,7 @@ export function FitDemo() {
             {jobs.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setActiveIndex(i)}
+                onClick={() => jumpTo(i)}
                 aria-label={`Go to ${jobs[i].company}`}
                 className={`h-1.5 rounded-full transition-all cursor-pointer ${
                   i === activeIndex

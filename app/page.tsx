@@ -4,6 +4,7 @@ import { motion } from "motion/react"
 import { Wordmark } from "@/components/Logo"
 import { ChromeIcon } from "@/components/ChromeIcon"
 import { FitDemo } from "@/components/FitDemo"
+import { WorksWith } from "@/components/WorksWith"
 import { HowItWorks } from "@/components/HowItWorks"
 import { Comparison } from "@/components/Comparison"
 import { Footer } from "@/components/Footer"
@@ -59,6 +60,9 @@ export default function Home() {
           <FitDemo />
         </motion.div>
       </div>
+
+      {/* Works with */}
+      <WorksWith />
 
       {/* How it works */}
       <HowItWorks />
