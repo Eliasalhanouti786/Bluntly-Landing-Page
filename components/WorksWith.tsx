@@ -1,8 +1,10 @@
 const platforms = [
   "LinkedIn",
+  "Reed",
+  "Totaljobs",
+  "Indeed",
   "Greenhouse",
   "Lever",
-  "Indeed",
   "Ashby",
   "Workable",
 ]
@@ -24,9 +26,8 @@ export function WorksWith() {
             </span>
           ))}
         </div>
-        <p className="text-xs text-zinc-600 mt-10 max-w-md mx-auto">
-          More platforms supported every month. Request one at
-          <span className="text-zinc-400"> hello@bluntly.dev</span>.
+        <p className="text-sm text-zinc-600 mt-10 italic">
+          And basically anywhere with a job description.
         </p>
       </div>
     </section>
